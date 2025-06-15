@@ -181,3 +181,28 @@ class Queen(Rook):
         return self._linear_moves(
             row, col, board, [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
         )
+
+
+class Knight(Piece):
+    """
+    Klasa reprezentująca skoczka.
+    """
+
+    def get_moves(self, row, col, board):
+        """
+        Skoczek porusza się w kształcie litery 'L'.
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :return: legalne ruchy
+        """
+
+        moves = []
+        for dr, dc in [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]:
+            r, c = row + dr, col + dc
+            if 0 <= r < 8 and 0 <= c < 8:
+                if board[r][c] is None or board[r][c].color != self.color:
+                    moves.append((r, c))
+
+        return moves
+
