@@ -212,3 +212,17 @@ class Board:
     def opponent(self, color):
         """Zwraca przeciwny kolor"""
         return 'b' if color == 'w' else 'w'
+
+    def is_checkmate(self, color):
+        """Sprawdza, czy dany kolor jest zamatowany"""
+        if not self.is_check(color):
+            return False
+
+        for r in range(8):
+            for c in range(8):
+                figure = self.board[r][c]
+                if figure and figure.color == color:
+                    if self.get_legal_moves(r, c):
+                        return False
+
+        return True
