@@ -145,3 +145,20 @@ class Rook(Piece):
                 c += dc
 
         return moves
+
+
+class Bishop(Rook):
+    """
+    Klasa reprezentująca gońca.
+    """
+
+    def get_moves(self, row, col, board):
+        """
+        Goniec porusza się tylko po przekątnych.
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :return: legalne ruchy
+        """
+
+        return self._linear_moves(row, col, board, [(-1, -1), (-1, 1), (1, -1), (1, 1)])
