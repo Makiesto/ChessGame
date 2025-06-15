@@ -2,7 +2,7 @@ import pygame
 import sys
 from menu import main_menu
 #from game import Game
-
+#
 pygame.init()
 
 WIDTH, HEIGHT= 640, 640
