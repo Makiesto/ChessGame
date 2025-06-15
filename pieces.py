@@ -162,3 +162,22 @@ class Bishop(Rook):
         """
 
         return self._linear_moves(row, col, board, [(-1, -1), (-1, 1), (1, -1), (1, 1)])
+
+
+class Queen(Rook):
+    """
+    Klasa reprezentująca hetmana (królowa).
+    """
+
+    def get_moves(self, row, col, board):
+        """
+        Hetman porusza się jak wieża + goniec.
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :return: legalne ruchy
+        """
+
+        return self._linear_moves(
+            row, col, board, [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+        )
