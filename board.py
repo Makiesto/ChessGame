@@ -82,6 +82,7 @@ class Board:
                 self.legal_moves = []
         elif self.board[row][col] and self.board[row][col].color == self.turn:
             self.selected = (row, col)
+            self.legal_moves = self.get_legal_moves(row, col)
 
     def move_piece(self, start, end):
         """
@@ -125,3 +126,74 @@ class Board:
         self.turn = 'b' if self.turn == 'w' else 'w'
 
         # Sprawdzanie zakończenia gry
+
+        # DOPISAC
+
+    def get_legal_moves(self, row, col):
+        """
+        Zwraca listę legalnych ruchów figury (bez pozostawienia króla w szachu).
+        :param row: wspolerzedna 1 (wiersz)
+        :param col: wspolerzedna 2 (kolumna)
+        """
+
+        figure = self.board[row][col]
+        moves = figure.get_moves(row, col, self.board)
+        legal = []
+
+        # Sprawdzenie każdego ruchu symulująć go
+        for move in moves:
+            er, ec = move
+            taken = self.board[er][ec]
+            self.board[er][ec] = figure
+            self.board[row][col] = None
+            if not self.is_check(figure.color):
+                legal.append(move)
+            self.board[row][col] = figure
+            self.board[er][ec] = taken
+
+        # Roszada
+        if isinstance(figure, King) and not figure.moved:
+            wiersz = 7 if figure.color == 'w' else 0
+
+            # Krótka roszada
+            rook_k = self.board[wiersz][7]
+            if isinstance(rook_k, Rook) and not rook_k.moved:
+                if all(self.board[wiersz][c] is None for c in [5, 6]):
+                    if not any(self.is_square_attacked(wiersz, c, self.opponent(figure.color)) for c in [4, 5, 6]):
+                        legal.append((wiersz, 6))
+
+    def is_check(self, color):
+        """Sprawdza, czy król danego koloru jest w szachu."""
+        king_pos = self.find_king(color)
+
+
+    def find_king(self, color):
+        """Zwraca pozycjękróla danego koloru."""
+        for r in range(8):
+            for c in range(8):
+                f = self.board[r][c]
+                if isinstance(f, King) and f.color == color:
+                    return (r, c)
+        return (-1, -1)
+
+    def is_square_attacked(self, row, col, by_color):
+        """
+        Sprawdza, czy pole jest atakowane przez kolor.
+        :param row: wspolerzedna 1 (wiersz)
+        :param col: wspolerzedna 2 (kolumna)
+        :param by_color: kolor, który atakuje
+        :return:
+        """
+
+        for r in range(8):
+            for c in range(8):
+                f = self.board[r][c]
+                if f and f.color == by_color:
+                    if (row, col) in f.get_moves(r, c, self.board):
+                        return True
+
+        return False
+
+    def opponent(self, color):
+        """Zwraca przeciwny kolor"""
+        return 'b' if color == 'w' else 'w'
