@@ -55,3 +55,14 @@ class Piece:
         }
 
         return piece_map[self.__class__.__name__]
+
+    def get_moves(self, row, col, board):
+        """
+        Zwraca liste legalnych ruchów dla figury
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: plansza
+        :return: legalne ruchy
+        """
+        return []
+
