@@ -30,6 +30,6 @@ def main():
         game.run()
 
 
-    if __name__ == '__main__':
-        #uruchamianie funkcji main tylko gdy skrypt jest wykonany bezposrednio
-        main()
+if __name__ == '__main__':
+    #uruchamianie funkcji main tylko gdy skrypt jest wykonany bezposrednio
+    main()

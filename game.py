@@ -21,8 +21,8 @@ class Game:
         self.running = True
         # Inicjalizacja dźwięków gry
         pygame.mixer.init()
-        self.move_sound = pygame.mixer.Sound("asssets/sounds/move_sound.wav")
-        self.check_sound = pygame.mixer.Sound("asssets/sounds/check_sound.mp3")
+        self.move_sound = pygame.mixer.Sound("assets/sounds/move_sound.wav")
+        self.check_sound = pygame.mixer.Sound("assets/sounds/check_sound.mp3")
         # przechowywanie metody wykonania ruchu, aby dodać efekty dźwiękowe
         self.original_movie_piece = self.board.move_piece
         self.board.movie_piece = self.wrapped_move_piece
