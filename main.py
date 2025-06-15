@@ -21,7 +21,7 @@ def main():
     pygame.display.set_caption("Szachy")
 
 
-    While True:
+    while True:
         #wyswietlanie menu głównego
         main_menu(screen)
 
