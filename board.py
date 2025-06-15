@@ -64,9 +64,9 @@ class Board:
                     win.blit(overlay, (col * self.square_size, row * self.square_size))
 
                 # Rysowanie figury
-                figura = self.board[row][col]
-                if figura:
-                    figura.draw(win, row, col, self.square_size)
+                figure = self.board[row][col]
+                if figure:
+                    figure.draw(win, row, col, self.square_size)
 
     def select(self, row, col):
         """
@@ -249,7 +249,7 @@ class Board:
             bishops = [f for f in figures if isinstance(f, Bishop)]
             if len(bishops) == 2:
                 colors = []
-                for f in range(8):
+                for r in range(8):
                     for c in range(8):
                         if self.board[r][c] in bishops:
                             colors.append((r + c) % 2)
