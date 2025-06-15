@@ -184,7 +184,6 @@ class Board:
         """Sprawdza, czy król danego koloru jest w szachu."""
         king_pos = self.find_king(color)
 
-
     def find_king(self, color):
         """Zwraca pozycjękróla danego koloru."""
         for r in range(8):
@@ -241,7 +240,7 @@ class Board:
         figures = [f for row in self.board for f in row if f]
 
         if len(figures) == 2:
-            return True # Król vs Król
+            return True  # Król vs Król
         elif len(figures) == 3:
             types = [type(f) for f in figures]
             if types.count(King) == 2 and (types.count(Bishop) == 1 or types.count(Knight) == 1):
