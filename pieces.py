@@ -205,4 +205,3 @@ class Knight(Piece):
                     moves.append((r, c))
 
         return moves
-
