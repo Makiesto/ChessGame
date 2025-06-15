@@ -205,3 +205,30 @@ class Knight(Piece):
                     moves.append((r, c))
 
         return moves
+
+
+class King(Piece):
+    """
+    Klasa reprezentująca króla.
+    """
+
+    def get_moves(self, row, col, board):
+        """
+        Krol porusza się o jedno pole w każdym kierunku.
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :return: legalne ruchy
+        """
+
+        moves = []
+        for dr in [-1, 0, 1]:
+            for dc in [-1, 0, 1]:
+                if dr == 0 and dc == 0:
+                    continue  # Król nie może zostać w miejscu
+                r, c = row + dr, col + dc
+                if 0 <= r < 8 and 0 <= c < 8:
+                    if board[r][c] is None or board[r][c].color != self.color:
+                        moves.append((r, c))
+
+        return moves
