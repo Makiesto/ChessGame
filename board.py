@@ -162,6 +162,21 @@ class Board:
                     if not any(self.is_square_attacked(wiersz, c, self.opponent(figure.color)) for c in [4, 5, 6]):
                         legal.append((wiersz, 6))
 
+            # Długa roszada
+            rook_d = self.board[wiersz][0]
+            if isinstance(rook_d, Rook) and not rook_d.moved:
+                if all(self.board[wiersz][c] is None for c in [1, 2, 3]):
+                    if not any(self.is_square_attacked(wiersz, c, self.opponent(figure.color)) for c in [4, 3, 2]):
+                        legal.append((wiersz, 2))
+
+        # En passant
+        if isinstance(figure, Pawn) and self.en_passant_target:
+            ep_r, ep_c = self.en_passant_target
+            if abs(col - ep_c) == 1 and ((figure.color == 'w' and row == 3) or (figure.color == 'b' and row == 4)):
+                legal.append((ep_r, ep_c))
+
+        return legal
+
     def is_check(self, color):
         """Sprawdza, czy król danego koloru jest w szachu."""
         king_pos = self.find_king(color)
