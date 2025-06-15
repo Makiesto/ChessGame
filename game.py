@@ -19,10 +19,12 @@ class Game:
         self.board = Board()
         self.clock = pygame.time.Clock()
         self.running = True
+
         # Inicjalizacja dźwięków gry
         pygame.mixer.init()
         self.move_sound = pygame.mixer.Sound("assets/sounds/move_sound.wav")
         self.check_sound = pygame.mixer.Sound("assets/sounds/check_sound.mp3")
+
         # przechowywanie metody wykonania ruchu, aby dodać efekty dźwiękowe
         self.original_movie_piece = self.board.move_piece
         self.board.movie_piece = self.wrapped_move_piece
@@ -101,67 +103,67 @@ class Game:
         self.score_button = score_rect
 
 
-def wait_for_postgame_action(self):
-    """Oczekuje na wybór użytkownika po zakonczeniu gry
-    - powrót do menu
-    - wyświetlenie tabeli wyników (potem znów powrót do wyboru)
-    """
-    waiting = True
-    while waiting:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                if self.menu_button.collidepoint(x, y):
+    def wait_for_postgame_action(self):
+        """Oczekuje na wybór użytkownika po zakonczeniu gry
+        - powrót do menu
+        - wyświetlenie tabeli wyników (potem znów powrót do wyboru)
+        """
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    if self.menu_button.collidepoint(x, y):
+                        waiting = False
+                    elif self.score_button.collidepoint(x, y):
+                        self.display_score_table()
+                        # Po powrocie z tabeli wyników, odśwież ekran końcowy gry
+                        self.display_winner(self.board.winner)
+
+
+    def display_score_table(self):
+        """
+        Wyświetla tabelę wyników z licznikami zwycięstw białych i czarnych        :param self:
+
+        """
+
+        white_wins, black_wins = get_score_summary()
+        self.screen.fill((20, 20, 20))
+
+        font = pygame.font.SysFont("arial", 32)
+        title = font.render("tabela wyników", True, (255, 255, 255))
+        self.screen.blit(title, ((640 - title.get_width()) // 2, 50))
+
+        # Etykiety i wartości punktów
+        label_font = pygame.font.SysFont("arial", 26)
+        label1 = label_font.render("białe", True, (255, 255, 255))
+        label2 = label_font.render("Carne", True, (255, 255, 255))
+
+        score_font = pygame.font.SysFont("arial", 24)
+        white_text = score_font.render(f"{white_wins}", True, (200, 200, 200))
+        black_text = score_font.render(f"{black_wins}", True, (200, 200, 200))
+
+        self.screen.blit(label1, (180, 150))
+        self.screen.blit(white_text, (200, 190))
+        self.screen.blit(label2, (400, 150))
+        self.screen.blit(black_text, (420, 190))
+
+        # Notka informacyjna
+        note_font = pygame.font.SysFont("arial", 20)
+        note = note_font.render("Kliknij gdzie kolwiek, aby wrócić", True, (160, 160, 160))
+        self.screen.blit(note, ((640 - note.get_width()) // 2, 500))
+
+        pygame.display.update()
+
+        # Czekaj na kliknięcie, aby powrocic
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
                     waiting = False
-                elif self.score_button.collidepoint(x, y):
-                    self.display_score_table()
-                    # Po powrocie z tabeli wyników, odśwież ekran końcowy gry
-                    self.display_winner(self.board.winner)
-
-
-def display_score_table(self):
-    """
-    Wyświetla tabelę wyników z licznikami zwycięstw białych i czarnych        :param self:
-
-    """
-
-    white_wins, black_wins = get_score_summary()
-    self.screen.fill((20, 20, 20))
-
-    font = pygame.font.SysFont("arial", 32)
-    title = font.render("tabela wyników", True, (255, 255, 255))
-    self.screen.blit(title, ((640 - title.get_width()) // 2, 50))
-
-    # Etykiety i wartości punktów
-    label_font = pygame.font.SysFont("arial", 26)
-    label1 = label_font.render("białe", True, (255, 255, 255))
-    label2 = label_font.render("Carne", True, (255, 255, 255))
-
-    score_font = pygame.font.SysFont("arial", 24)
-    white_text = score_font.render(f"{white_wins}", True, (200, 200, 200))
-    black_text = score_font.render(f"{black_wins}", True, (200, 200, 200))
-
-    self.screen.blit(label1, (180, 150))
-    self.screen.blit(white_text, (200, 190))
-    self.screen.blit(label2, (400, 150))
-    self.screen.blit(black_text, (420, 190))
-
-    # Notka informacyjna
-    note_font = pygame.font.SysFont("arial", 20)
-    note = note_font.render("Kliknij gdzie kolwiek, aby wrócić", True, (160, 160, 160))
-    self.screen.blit(note, ((640 - note.get_width()) // 2, 500))
-
-    pygame.display.update()
-
-    # Czekaj na kliknięcie, aby powrocic
-    waiting = True
-    while waiting:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                waiting = False
