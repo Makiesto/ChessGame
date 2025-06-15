@@ -28,3 +28,18 @@ def main_menu(screen)
 
         pygame.display.update()
 
+
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+
+                pygame.quit()
+                sys.exit()
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key ==pygame.K_SPACE:
+
+                    return
+                elif event.key == pygame.K_ESCSPACE:
+
+                    pygame.quit()
+                    sys.exit()
