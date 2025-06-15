@@ -64,9 +64,9 @@ class Board:
                     win.blit(overlay, (col * self.square_size, row * self.square_size))
 
                 # Rysowanie figury
-                figura = self.board[row][col]
-                if figura:
-                    figura.draw(win, row, col, self.square_size)
+                figure = self.board[row][col]
+                if figure:
+                    figure.draw(win, row, col, self.square_size)
 
     def select(self, row, col):
         """
@@ -127,7 +127,10 @@ class Board:
 
         # Sprawdzanie zakończenia gry
 
-        # DOPISAC
+        if self.is_checkmate(self.turn):
+            self.winner = 'Białe' if self.turn == 'b' else 'Czarne'
+        elif self.is_insufficient_material():
+            self.winner = "Remis"
 
     def get_legal_moves(self, row, col):
         """
@@ -162,10 +165,24 @@ class Board:
                     if not any(self.is_square_attacked(wiersz, c, self.opponent(figure.color)) for c in [4, 5, 6]):
                         legal.append((wiersz, 6))
 
+            # Długa roszada
+            rook_d = self.board[wiersz][0]
+            if isinstance(rook_d, Rook) and not rook_d.moved:
+                if all(self.board[wiersz][c] is None for c in [1, 2, 3]):
+                    if not any(self.is_square_attacked(wiersz, c, self.opponent(figure.color)) for c in [4, 3, 2]):
+                        legal.append((wiersz, 2))
+
+        # En passant
+        if isinstance(figure, Pawn) and self.en_passant_target:
+            ep_r, ep_c = self.en_passant_target
+            if abs(col - ep_c) == 1 and ((figure.color == 'w' and row == 3) or (figure.color == 'b' and row == 4)):
+                legal.append((ep_r, ep_c))
+
+        return legal
+
     def is_check(self, color):
         """Sprawdza, czy król danego koloru jest w szachu."""
         king_pos = self.find_king(color)
-
 
     def find_king(self, color):
         """Zwraca pozycjękróla danego koloru."""
@@ -197,3 +214,45 @@ class Board:
     def opponent(self, color):
         """Zwraca przeciwny kolor"""
         return 'b' if color == 'w' else 'w'
+
+    def is_checkmate(self, color):
+        """Sprawdza, czy dany kolor jest zamatowany"""
+        if not self.is_check(color):
+            return False
+
+        for r in range(8):
+            for c in range(8):
+                figure = self.board[r][c]
+                if figure and figure.color == color:
+                    if self.get_legal_moves(r, c):
+                        return False
+
+        return True
+
+    def is_insufficient_material(self):
+        """
+        Sprawdza czy jest remis przez niewystarczający materiał:
+        - Król vs król
+        - Król + skoczek/goniec vs Król
+        - Król + goniec vs Król + goniec (na tym samym kolorze pola)
+        """
+
+        figures = [f for row in self.board for f in row if f]
+
+        if len(figures) == 2:
+            return True  # Król vs Król
+        elif len(figures) == 3:
+            types = [type(f) for f in figures]
+            if types.count(King) == 2 and (types.count(Bishop) == 1 or types.count(Knight) == 1):
+                return True
+        elif len(figures) == 4:
+            bishops = [f for f in figures if isinstance(f, Bishop)]
+            if len(bishops) == 2:
+                colors = []
+                for r in range(8):
+                    for c in range(8):
+                        if self.board[r][c] in bishops:
+                            colors.append((r + c) % 2)
+                if len(set(colors)) == 1:
+                    return True
+        return False
