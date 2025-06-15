@@ -61,8 +61,43 @@ class Piece:
         Zwraca liste legalnych ruchów dla figury
         :param row: wiersz planszy
         :param col: kolumna planszy
-        :param board: plansza
+        :param board: dwuwymiarowa lista z figurami
         :return: legalne ruchy
         """
         return []
 
+
+class Pawn(Piece):
+    """
+    Klasa reprezentująca pionka
+    """
+
+    def get_moves(self, row, col, board):
+        """
+        Zwraca możliwe ruchy piona, uwzględniając ruch o 1 lub 2 pola oraz bicia na ukos.
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :return: legalne ruchy
+        """
+
+        moves = []
+        direction = -1 if self.color == 'w' else 1
+        start_row = 6 if self.color == 'w' else 1
+
+        # Ruch do przodu o jedno pole
+        if 0 <= row + direction < 8 and board[row + direction][col] is None:
+            moves.append((row + direction, col))
+
+            # Ruch o dwa pola ze startowej pozycji
+            if row == start_row and board[row + 2 * direction][col] is None:
+                moves.append((row + 2 * direction, col))
+
+        # Bicie na ukos
+        for dc in [-1, 1]:
+            nr, nc = row + direction, col + dc
+            if 0 <= nr < 8 and 0 <= nc < 8:
+                if board[nr][nc] and board[nr][nc].color != self.color:
+                    moves.append((nr, nc))
+
+        return moves
