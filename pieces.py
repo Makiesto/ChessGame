@@ -101,3 +101,47 @@ class Pawn(Piece):
                     moves.append((nr, nc))
 
         return moves
+
+
+class Rook(Piece):
+    """
+    Klasa reprezentująca wieżę
+    """
+
+    def get_moves(self, row, col, board):
+        """
+        Zwraca możliwe ruchy wieży w linii prostej.
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :return: legalne ruchy
+        """
+
+        return self._linear_moves(row, col, board, [(-1, 0), (1, 0), (0, -1), (0, 1)])
+
+    def _linear_moves(self, row, col, board, directions):
+        """
+        Zwraca ruchy w podanych kierunkach
+        :param row: wiersz planszy
+        :param col: kolumna planszy
+        :param board: dwuwymiarowa lista z figurami (lub None)
+        :param directions: kierunki
+        :return: legalne ruchy
+        """
+
+        moves = []
+        for dr, dc in directions:
+            r, c = row + dr, col + dc
+            while 0 <= r < 8 and 0 <= c < 8:
+                if board[r][c] is None:
+                    moves.append((r, c))
+                elif board[r][c].color != self.color:
+                    moves.append((r, c))  # można bić
+                    break
+                else:
+                    break  # zablokowany przez wlasną figurę
+
+                r += dr
+                c += dc
+
+        return moves
