@@ -55,7 +55,7 @@ class Board:
                 # Podświetalnie możliwych ruchów
                 if (row, col) in self.legal_moves:
                     pygame.draw.rect(win, GREEN, (
-                    col * self.square_size, row * self.square_size, self.square_size, self.square_size), 3)
+                        col * self.square_size, row * self.square_size, self.square_size, self.square_size), 3)
 
                 # Podświetlenie ostatniego ruchu
                 if self.last_move == (row, col):
@@ -67,3 +67,61 @@ class Board:
                 figura = self.board[row][col]
                 if figura:
                     figura.draw(win, row, col, self.square_size)
+
+    def select(self, row, col):
+        """
+        Obsługuje wybór figury lub wykonanie ruchu.
+        :param row: wspolerzedna 1 (wiersz)
+        :param col: wspolerzedna 2 (kolumna)
+        """
+
+        if self.selected:
+            if (row, col) in self.legal_moves:
+                self.move_piece(self.selected, (row, col))
+                self.selected = None
+                self.legal_moves = []
+        elif self.board[row][col] and self.board[row][col].color == self.turn:
+            self.selected = (row, col)
+
+    def move_piece(self, start, end):
+        """
+        Wykonuje ruch i obsługuje spejcalne przypadki takie jak roszada, promocja, en passant.
+        :param start: początek ruchu
+        :param end: koniec ruchu
+        """
+
+        sr, sc = start
+        er, ec = end
+        figure = self.board[sr][sc]
+
+        # Roszada
+        if isinstance(figure, King) and abs(sc - ec) == 2:
+            if ec == 6:  # krótka roszada
+                self.board[er][5] = self.board[er][7]
+                self.board[er][7] = None
+            elif ec == 2:  # długa roszada
+                self.board[er][3] = self.board[er][0]
+                self.board[er][0] = None
+
+        # Bicie w przelocie
+        if isinstance(figure, Pawn) and (er, ec) == self.en_passant_target:
+            self.board[sr][ec] = None
+
+        # Wykonanie ruchu
+        self.board[er][ec] = figure
+        self.board[sr][sc] = None
+        figure.moved = True
+
+        # Promocja piona
+        if isinstance(figure, Pawn) and (er == 0 or er == 7):
+            self.board[er][ec] = Queen(figure.color)
+
+        # Ustawienie pola do e.p.
+        self.en_passant_target = None
+        if isinstance(figure, Pawn) and abs(er - sr) == 2:
+            self.en_passant_target = ((sr + er) // 2, sc)
+
+        self.last_move = end
+        self.turn = 'b' if self.turn == 'w' else 'w'
+
+        # Sprawdzanie zakończenia gry
