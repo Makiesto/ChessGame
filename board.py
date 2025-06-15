@@ -127,7 +127,10 @@ class Board:
 
         # Sprawdzanie zakończenia gry
 
-        # DOPISAC
+        if self.is_checkmate(self.turn):
+            self.winner = 'Białe' if self.turn == 'b' else 'Czarne'
+        elif self.is_insufficient_material():
+            self.winner = "Remis"
 
     def get_legal_moves(self, row, col):
         """
@@ -226,3 +229,31 @@ class Board:
                         return False
 
         return True
+
+    def is_insufficient_material(self):
+        """
+        Sprawdza czy jest remis przez niewystarczający materiał:
+        - Król vs król
+        - Król + skoczek/goniec vs Król
+        - Król + goniec vs Król + goniec (na tym samym kolorze pola)
+        """
+
+        figures = [f for row in self.board for f in row if f]
+
+        if len(figures) == 2:
+            return True # Król vs Król
+        elif len(figures) == 3:
+            types = [type(f) for f in figures]
+            if types.count(King) == 2 and (types.count(Bishop) == 1 or types.count(Knight) == 1):
+                return True
+        elif len(figures) == 4:
+            bishops = [f for f in figures if isinstance(f, Bishop)]
+            if len(bishops) == 2:
+                colors = []
+                for f in range(8):
+                    for c in range(8):
+                        if self.board[r][c] in bishops:
+                            colors.append((r + c) % 2)
+                if len(set(colors)) == 1:
+                    return True
+        return False
