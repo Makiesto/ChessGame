@@ -16,3 +16,15 @@ def main_menu(screen)
     while True:
 
         screen.fill(WHITE)
+
+        title =font.render("Witamy w grze szachy", True, BLACK)
+        play_text = small_font.render("Nacisnij SPACJĘ, aby rozpocząć", True, BLUE)
+        quit_text = small_font.render("naciśnij ESC, aby wyjść", True, BLUE)
+
+
+        screen.blit(title,((640-title.get_width()) // 2,200))
+        screen.blit(play_text,((640-title.get_width()) // 2,300))
+        screen.blit(quit_text, ((640-title.get_width()) // 2,350))
+
+        pygame.display.update()
+
