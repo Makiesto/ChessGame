@@ -78,8 +78,8 @@ class Board:
         if self.selected:
             if (row, col) in self.legal_moves:
                 self.move_piece(self.selected, (row, col))
-                self.selected = None
-                self.legal_moves = []
+            self.selected = None
+            self.legal_moves = []
         elif self.board[row][col] and self.board[row][col].color == self.turn:
             self.selected = (row, col)
             self.legal_moves = self.get_legal_moves(row, col)
@@ -183,6 +183,7 @@ class Board:
     def is_check(self, color):
         """Sprawdza, czy król danego koloru jest w szachu."""
         king_pos = self.find_king(color)
+        return self.is_square_attacked(*king_pos, self.opponent(color))
 
     def find_king(self, color):
         """Zwraca pozycjękróla danego koloru."""

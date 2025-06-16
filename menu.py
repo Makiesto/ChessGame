@@ -33,8 +33,8 @@ def main_menu(screen):
 
         # Renderowanie tekstów
         title = font.render("Witamy w grze szachy", True, BLACK)
-        play_text = small_font.render("Nacisnij SPACJĘ, aby rozpocząć", True, BLUE)
-        quit_text = small_font.render("naciśnij ESC, aby wyjść", True, BLUE)
+        play_text = small_font.render("Naciśnij SPACJĘ, aby rozpocząć", True, BLUE)
+        quit_text = small_font.render("Naciśnij ESC, aby wyjść", True, BLUE)
 
         # Rysowanie tekstów na środku ekranu
         screen.blit(title, ((640 - title.get_width()) // 2, 200))

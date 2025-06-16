@@ -77,12 +77,12 @@ class Game:
 
         font = pygame.font.SysFont("arial", 36)
         if self.board.is_insufficient_material():
-            text = font.render("remis!", True, (255, 255, 0))
+            text = font.render("Remis!", True, (255, 255, 0))
         else:
-            text = font.render(f"Szach_Mat! Wygrywa{winner}", True, (255, 0, 0))
+            text = font.render(f"Szach Mat! Wygrywają {winner}", True, (255, 0, 0))
 
         self.screen.fill((0, 0, 0))
-        self.screen.bilt(text, ((640 - text.get_width()) // 2, 200))
+        self.screen.blit(text, ((640 - text.get_width()) // 2, 200))
 
         # Rysowanie przyciskó gry
         button_font = pygame.font.SysFont("arial", 28)
@@ -92,7 +92,7 @@ class Game:
         pygame.draw.rect(self.screen, (100, 100, 100), menu_rect)
         self.screen.blit(menu_text, (menu_rect.x + 20, menu_rect.y + 10))
 
-        score_text = button_font.render("Tabela Wyników", True, (255, 255, 255))
+        score_text = button_font.render("Tabela wyników", True, (255, 255, 255))
         score_rect = pygame.Rect(195, 350, 250, 50)
         pygame.draw.rect(self.screen, (100, 100, 100), score_rect)
         self.screen.blit(score_text, (score_rect.x + 20, score_rect.y + 10))
@@ -134,13 +134,13 @@ class Game:
         self.screen.fill((20, 20, 20))
 
         font = pygame.font.SysFont("arial", 32)
-        title = font.render("tabela wyników", True, (255, 255, 255))
+        title = font.render("Tabela wyników", True, (255, 255, 255))
         self.screen.blit(title, ((640 - title.get_width()) // 2, 50))
 
         # Etykiety i wartości punktów
         label_font = pygame.font.SysFont("arial", 26)
-        label1 = label_font.render("białe", True, (255, 255, 255))
-        label2 = label_font.render("Carne", True, (255, 255, 255))
+        label1 = label_font.render("Białe", True, (255, 255, 255))
+        label2 = label_font.render("Czarne", True, (255, 255, 255))
 
         score_font = pygame.font.SysFont("arial", 24)
         white_text = score_font.render(f"{white_wins}", True, (200, 200, 200))
@@ -153,7 +153,7 @@ class Game:
 
         # Notka informacyjna
         note_font = pygame.font.SysFont("arial", 20)
-        note = note_font.render("Kliknij gdzie kolwiek, aby wrócić", True, (160, 160, 160))
+        note = note_font.render("Kliknij gdziekolwiek, aby wrócić", True, (160, 160, 160))
         self.screen.blit(note, ((640 - note.get_width()) // 2, 500))
 
         pygame.display.update()
