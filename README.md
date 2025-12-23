@@ -23,10 +23,10 @@ score.py             # Zapisywanie i zliczanie wyników
 assets/              # Folder z grafiką i dźwiękami
 results.txt          # Plik z wynikami gier
 
+ENG
+
 Chess Game — Python + Pygame
 A fully interactive 2D chess game built with Python and Pygame. This project includes full chess logic, sound effects, a graphical interface, a main menu, an endgame screen, and result tracking.
-
-ENG
 
 Features:
 - Complete chess rules implementation (check, checkmate, etc.)
